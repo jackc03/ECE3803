@@ -1,0 +1,28 @@
+Part 1:
+    gpu_copy_time = 6.0ms
+    gpu_exec_time = 2.8ms
+    cpu_exec_time = 47.0ms
+
+    since gpu_exec_time is for 16M ints, we can say:
+        gpu_time = x * gpu_exec_time/(2^24) + gpu_copy_time
+        gpu_time = x * 2.8ms/(2^24) + 6.0ms
+        gpu_time = x * 0.00000000016689300537109375 + .006
+
+
+    do the same for cpu cpu_exec_time:
+        cpu_time = x * cpu_exec_time / (2^24) 
+        cpu_time = x * 47ms / (2^24) 
+        cpu_time = x * 0.000000002801418304443359375
+
+    setting them equal:
+    cpu_time = gpu_time
+    x * 0.000000002801418304443359375 = x * 00000000016689300537109375 + .006
+    x * (0.00000000280141830444335937 - 0.0000000001668930053710937) = .006
+    x = 2,277,450.1357466062959407855531843(ints)
+    x = 2,277,450.1357466062959407855531843(ints) * 4(bytes/int)
+    x = 9,109,801 bytes
+
+
+Part 2:
+    since the indexes are multiplied by 3 and 2 for x and y respectively, I would think each thread computes:
+    (threadidx.x * 3 - (threadx.x - 1) * 3) * (threadidx.y * 2 - (threadidx.y - 1) * 2) elements
